@@ -24,11 +24,13 @@ export default function StreetMap() {
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase
-        .from("street_stats") // Querying the View, not the raw table
+        .from("street_stats_decay") // Querying the View, not the raw table
         .select("*");
 
       if (data) setStreets(data);
       if (error) console.error(error);
+
+      if (data) console.log("Fetched streets:", data.length);
     };
 
     fetchData();
@@ -92,11 +94,12 @@ export default function StreetMap() {
               <div className="text-center">
                 <h3 className="font-bold">{street.name}</h3>
                 <div className="flex gap-2 mt-2">
-
-                
-                    <span className="border px-2 py-1 rounded text-xs">💡 Strom: {street.light_count}</span>
-                    <span className="border px-2 py-1 rounded text-xs">🌑 kein Strom: {street.dark_count}</span>
-                
+                  <span className="border px-2 py-1 rounded text-xs">
+                    💡 Strom: {street.light_score}
+                  </span>
+                  <span className="border px-2 py-1 rounded text-xs">
+                    🌑 kein Strom: {street.dark_score}
+                  </span>
                 </div>
                 <div className="flex gap-2 mt-2">
                   <button
